@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)  //Подключает аннотацию для контроля роли в "UserController"
+@EnableGlobalMethodSecurity(prePostEnabled = true)  //Подключает аннотацию для контроля роли в "UserController"
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()   //Включаем авторизацию
-                    .antMatchers("/", "/registration").permitAll()  //указываем, что для главной страницы есть доступ у всех
+                    .antMatchers("/", "/registration", "/static").permitAll()  //указываем, для каких страниц есть доступ у всех
                     .anyRequest().authenticated()  //а для всех остальных запросов мы требуем авторизацию
                 .and()
                     .formLogin()  // включаем форму Login (из нашего шаблона MvcConfig

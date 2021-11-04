@@ -11,13 +11,15 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <input type="text" name="text" placeholder="Enter text">
         <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <input type="text" name="tag" placeholder="Tag">
+        <input type="file" name="file">
         <button type="submit">Send messages</button>
     </form>
 </div>
@@ -26,7 +28,6 @@
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <button type="submit">Search</button>
 </form>
-<div>
 <c:forEach items="${messages}" var="mess">
     <div>
         <tr>
@@ -34,9 +35,13 @@
             <td>${mess.tag}</td>
             <td>${mess.nameAuthor}</td>
         </tr>
+        <div>
+            <c:if test="${!mess.filename}" >
+                <img src="/img/${mess.filename}" alt="">
+            </c:if>
+        </div>
     </div>
     </c:forEach>
-    </div>
 <form action="/logout" method="post">
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <input type="submit" value="Sign Out"/>
