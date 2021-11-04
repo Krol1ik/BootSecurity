@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isELIgnored = "false" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: user
@@ -45,6 +45,11 @@
                     <a class="nav-link" href="/user">User list</a>
                 </li>
             </ul>
+            <div class="navbar-text mr-3">
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authentication property="name"/>
+                </sec:authorize>
+            </div>
         </div>
     </nav>
 </header>
@@ -72,11 +77,9 @@
             <td>${mess.tag}</td>
             <td>${mess.nameAuthor}</td>
         </tr>
-        <div class="card my-3">
-<%--            <c:if test="${!mess.filename}" >--%>
-            <img src="/img/${message.filename}" class="card-img-top" style="height: 200px">
-<%--            </c:if>--%>
-        </div>
+            <c:if test="${!mess.filename}" >
+            <img src="/img/${mess.filename}" class="card-img-top" style="height: 200px">
+            </c:if>
     </div>
     </c:forEach>
 </div>

@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored = "false" %>
 <%--
   Created by IntelliJ IDEA.
   User: user
@@ -5,6 +7,7 @@
   Time: 21:23
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -42,11 +45,19 @@
                     <a class="nav-link" href="/user">User list</a>
                 </li>
             </ul>
+            <div class="navbar-text mr-3">
+                <sec:authorize access="isAuthenticated()">
+                    <sec:authentication property="name"/>
+                </sec:authorize>
+            </div>
         </div>
     </nav>
 </header>
 
 Form login
+<c:if test="${!messages}">
+    <p>${messages}</p>
+</c:if>
 <form action="/login" method="post">
     <div><label> User Name : <input type="text" name="username"/> </label></div>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />

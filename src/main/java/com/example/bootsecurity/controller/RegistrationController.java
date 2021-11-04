@@ -2,11 +2,12 @@ package com.example.bootsecurity.controller;
 
 import com.example.bootsecurity.model.Role;
 import com.example.bootsecurity.model.User;
-import com.example.bootsecurity.repository.UserRepository;
+import com.example.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.Collections;
 public class RegistrationController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/registration")
     public String registration(){
@@ -24,24 +25,24 @@ public class RegistrationController {
 
     @PostMapping ("/registration")
     public String addUser (User user, Model model){
-        User userFromBD = userRepository.findByUsername(user.getUsername());
-        if(userFromBD != null){
+
+        if(!userService.addUser(user)){
             model.addAttribute("messages", "User exist!");
             return "registration";
         } else {
-            user.setRoles(Collections.singleton(Role.USER));
-            user.setActive(true);
-            userRepository.save(user);
-
-            //Создание админа для тестов
-            User admin = new User();
-            admin.setRoles(Collections.singleton(Role.ADMIN));
-            admin.setUsername("admin");
-            admin.setPassword("pass");
-            admin.setActive(true);
-            userRepository.save(admin);
-
-            return "redirect:login";
+            return "redirect:/login";
         }
+    }
+
+    @GetMapping("/activate/{code}")
+    public String activate (Model model, @PathVariable String code){
+        boolean isActivated = userService.activateUser(code);
+
+        if(isActivated){
+            model.addAttribute("messages", "Activation is successful");
+        } else {
+            model.addAttribute("messages","Activation code is not found");
+        }
+        return "login";
     }
 }
