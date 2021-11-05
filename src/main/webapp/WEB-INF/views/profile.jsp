@@ -1,17 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isELIgnored = "false" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: user
   Date: 03.11.2021
-  Time: 22:01
+  Time: 18:26
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Registration</title>
+    <title>Profile</title>
     <link rel="stylesheet" href="/static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -49,7 +49,7 @@
                 <li class="nav-item">
                     <sec:authorize access="isAuthenticated()">
                         <a class="nav-link" href="/user/profile">Profile</a>
-                    </sec:authorize>
+                </sec:authorize>
                 </li>
             </ul>
             <div class="navbar-text mr-3">
@@ -60,17 +60,20 @@
         </div>
     </nav>
 </header>
-
-Add new user
-<c:if test="${!messages}">
-    <p>${messages}</p>
-</c:if>
-<form action="/registration" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><label> E-mail: <input type="email" name="email"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+<section>
+    <h5>Form change data
+    <c:if test="${!messages}">
+        <p>${messages}</p>
+    </c:if>
+    <form method="post">
+        <div style="margin-left: 150px"><label> ${username} </label></div>
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
+        <div><label> New password: <input type="password" name="password" placeholder="Password"/> </label></div>
+        <div><label> New e-mail: <input type="email" name="email" value="${email}"/> </label></div>
+        <div><button type="submit">Save</button> </div>
+    </form>
+    </h5>
+    </form>
+</section>
 </body>
 </html>

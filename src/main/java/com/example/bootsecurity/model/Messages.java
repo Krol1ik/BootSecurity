@@ -1,25 +1,29 @@
 package com.example.bootsecurity.model;
 
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Messages {
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
 
     private String text;
     private String tag;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    @JoinColumn (name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
     private User author;
 
     private String filename;
 
     public Messages() {
     }
+
 
     public String getNameAuthor(){
         return author != null ? author.getUsername() : "<none>";
@@ -64,11 +68,11 @@ public class Messages {
         this.author = author;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

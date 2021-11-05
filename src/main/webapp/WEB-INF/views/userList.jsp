@@ -42,7 +42,14 @@
                     <a class="nav-link" href="/main">Messages</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user">User list</a>
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <a class="nav-link" href="/user">User list</a>
+                    </sec:authorize>
+                </li>
+                <li class="nav-item">
+                    <sec:authorize access="isAuthenticated()">
+                        <a class="nav-link" href="/user/profile">Profile</a>
+                    </sec:authorize>
                 </li>
             </ul>
             <div class="navbar-text mr-3">

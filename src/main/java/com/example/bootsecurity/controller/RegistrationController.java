@@ -1,6 +1,5 @@
 package com.example.bootsecurity.controller;
 
-import com.example.bootsecurity.model.Role;
 import com.example.bootsecurity.model.User;
 import com.example.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-
-import java.util.Collections;
 
 @Controller
 public class RegistrationController {

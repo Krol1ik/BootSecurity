@@ -7,18 +7,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService{
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private MailSender mailSender;
+    private MailSenderService mailSenderService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -33,9 +36,15 @@ public class UserService implements UserDetailsService{
         user.setActive(false);
         user.setRoles(Collections.singleton(Role.USER));
         user.setActivationCode(UUID.randomUUID().toString());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));   //зашифровали пароль пользователя
 
         userRepository.save(user);
 
+        sendMessag(user);
+        return true;
+    }
+
+    private void sendMessag(User user) {
         if(!StringUtils.isEmpty(user.getEmail())){
             String message = String.format(
                     "Hello, %s! \n" +
@@ -43,9 +52,8 @@ public class UserService implements UserDetailsService{
                     user.getUsername(),
                     user.getActivationCode()
             );
-            mailSender.send(user.getEmail(),"Activation code", message);
+            mailSenderService.send(user.getEmail(),"Activation code", message);
         }
-        return true;
     }
 
     public boolean activateUser(String code) {
@@ -60,5 +68,48 @@ public class UserService implements UserDetailsService{
         userRepository.save(user);
 
         return true;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public void save(User user, String username, Map<String, String> form) {
+        user.setUsername(username);
+
+        Set<String> roles = Arrays.stream(Role.values())        //Получаем список ролей, чтобы проверить, что они установленны данному пользователю
+                .map(Role::name)
+                .collect(Collectors.toSet());
+
+        user.getRoles().clear();
+        for (String key : form.keySet()) {  // проверяем, что наша форма содержит роли для нашего пользователя
+            if(roles.contains(key)) {
+                user.getRoles().add(Role.valueOf(key));
+            }
+        }
+        userRepository.save(user);
+    }
+
+    public void updateProfile(User user, String password, String email) {
+        String userEmail = user.getEmail();
+
+        boolean isEmailChanged = (email != null && !email.equals(userEmail)
+                                    || email !=null && !userEmail.equals(email));
+
+        if(isEmailChanged){
+            user.setEmail(email);
+
+            if (!StringUtils.isEmpty(email)){   //если пользователь установил пароль
+                user.setActivationCode(UUID.randomUUID().toString());   //то мы присваеваем новый код активации
+            }
+        }
+        if (!StringUtils.isEmpty(password)){
+            user.setPassword(password);
+        }
+
+        userRepository.save(user);
+        if(isEmailChanged){
+            sendMessag(user);
+        }
     }
 }
