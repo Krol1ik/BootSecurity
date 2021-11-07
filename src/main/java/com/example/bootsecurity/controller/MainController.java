@@ -3,9 +3,11 @@ package com.example.bootsecurity.controller;
 import com.example.bootsecurity.model.Messages;
 import com.example.bootsecurity.model.User;
 import com.example.bootsecurity.repository.MessagesRepository;
+import com.example.bootsecurity.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,10 @@ import java.util.UUID;
 
 @Controller
 public class MainController {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private MessagesRepository messagesRepository;
@@ -33,6 +39,17 @@ public class MainController {
     public String greeting() {
 
         return "greeting";
+    }
+    @PostMapping()
+    public String updatePasswordCoding() {
+        User admin = userRepository.findByUsername("admin");
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));     //весь код для кодирвоки существующих паролей
+
+        User user = userRepository.findByUsername("user");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(admin);
+        userRepository.save(user);
+        return "redirect:/login";
     }
 
     @GetMapping("/main")

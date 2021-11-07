@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -40,8 +41,14 @@
                 <a class="nav-link" href="/main">Messages</a>
             </li>
             <li class="nav-item">
-                <sec:authorize access="hasRole('ADMIN')">
+                <sec:authorize access="hasAuthority('ADMIN')">
                     <a class="nav-link" href="/user">User list</a>
+                </sec:authorize>
+
+            </li>
+            <li class="nav-item">
+                <sec:authorize access="hasAuthority('ADMIN')">
+                    <a class="nav-link" href="/h2-console">Database</a>
                 </sec:authorize>
             </li>
             <li class="nav-item">
@@ -59,7 +66,11 @@
 </nav>
 </header>
 <div class="container mt-5">
-    Hello user
+    <sec:authorize access="!isAuthenticated()">
+    <form method="post">
+        <button type="submit">Update password</button>
+    </form>
+    </sec:authorize>
 </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-create sequence hibernate_sequence start with 2 increment by 1;
+create sequence hibernate_sequence start with 3 increment by 1;
 
 create table messages
 (

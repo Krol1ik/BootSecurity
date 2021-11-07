@@ -92,23 +92,31 @@ public class UserService implements UserDetailsService{
 
     public void updateProfile(User user, String password, String email) {
         String userEmail = user.getEmail();
+        String userPassword = user.getPassword();
 
         boolean isEmailChanged = (email != null && !email.equals(userEmail)
                                     || email !=null && !userEmail.equals(email));
+        boolean isPasswordChanged = (password != null && !password.equals(userPassword)
+                || password !=null && !userPassword.equals(email));
 
         if(isEmailChanged){
             user.setEmail(email);
 
-            if (!StringUtils.isEmpty(email)){   //если пользователь установил пароль
+            if (!StringUtils.isEmpty(email)){   //если пользователь установил емаил
                 user.setActivationCode(UUID.randomUUID().toString());   //то мы присваеваем новый код активации
             }
         }
         if (!StringUtils.isEmpty(password)){
             user.setPassword(password);
+
+            if (!StringUtils.isEmpty(password)){   //если пользователь установил пароль
+                user.setActivationCode(UUID.randomUUID().toString());   //то мы присваеваем новый код активации
+            }
         }
 
+        user.setActive(false);
         userRepository.save(user);
-        if(isEmailChanged){
+        if(isEmailChanged || isPasswordChanged || isPasswordChanged && isEmailChanged){
             sendMessag(user);
         }
     }

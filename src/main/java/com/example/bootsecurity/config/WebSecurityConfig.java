@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()   //Включаем авторизацию
-                    .antMatchers("/", "/registration", "/static/**", "/activate/*").permitAll()  //указываем, для каких страниц есть доступ у всех
+                    .antMatchers("/", "/registration", "/static/**", "/activate/*", "/h2-console/**").permitAll()  //указываем, для каких страниц есть доступ у всех
                     .anyRequest().authenticated()  //а для всех остальных запросов мы требуем авторизацию
                 .and()
                     .formLogin()  // включаем форму Login (из нашего шаблона MvcConfig
@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance());      //настроили проверку паролей при логине
-//        .passwordEncoder(passwordEncoder);
+//                .passwordEncoder(NoOpPasswordEncoder.getInstance());      //настроили проверку паролей при логине
+        .passwordEncoder(passwordEncoder);
     }
 }

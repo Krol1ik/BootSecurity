@@ -1,8 +1,10 @@
 package com.example.bootsecurity.controller;
 
 import com.example.bootsecurity.model.User;
+import com.example.bootsecurity.repository.UserRepository;
 import com.example.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,6 @@ public class RegistrationController {
 
     @PostMapping ("/registration")
     public String addUser (User user, Model model){
-
         if(!userService.addUser(user)){
             model.addAttribute("messages", "User exist!");
             return "registration";

@@ -42,8 +42,13 @@
                     <a class="nav-link" href="/main">Messages</a>
                 </li>
                 <li class="nav-item">
-                    <sec:authorize access="hasRole('ADMIN')">
+                    <sec:authorize access="hasAuthority('ADMIN')">
                         <a class="nav-link" href="/user">User list</a>
+                    </sec:authorize>
+                </li>
+                <li class="nav-item">
+                    <sec:authorize access="hasAuthority('ADMIN')">
+                        <a class="nav-link" href="/h2-console">Database</a>
                     </sec:authorize>
                 </li>
                 <li class="nav-item">
