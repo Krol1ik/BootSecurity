@@ -8,8 +8,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
@@ -44,9 +46,10 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     //@AuthenticationPrincipal User user - благодоря этой аннотации мы получаем пользователя из контекста, а не из БД
     public String getProfile (Model model, @AuthenticationPrincipal User user){
+        model.addAttribute("user", new User());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         return "profile";
@@ -54,12 +57,17 @@ public class UserController {
 
     @PostMapping("profile")
     public String updateProfile (
-            @AuthenticationPrincipal User user,
+            @Valid @ModelAttribute ("user") @AuthenticationPrincipal User user,
+            BindingResult bindingResult,
             @RequestParam String password,
             @RequestParam String email
     ){
-        userService.updateProfile(user, password, email);
+        if(bindingResult.hasErrors()){
+            return "/profile";
+        } else {
+            userService.updateProfile(user, password, email);
 
-        return "redirect:/user/profile";
+            return "redirect:profile";
+        }
     }
 }

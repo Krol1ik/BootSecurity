@@ -7,3 +7,7 @@ body {
     height: 250px;
     display: flex;
 }
+
+.err{
+    color: red;
+}

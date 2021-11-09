@@ -5,13 +5,16 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Messages {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-
+//    @NotEmpty(message = "Please fill the message")
+    @Size(max = 2048, message = "Message too long")
     private String text;
     private String tag;
 

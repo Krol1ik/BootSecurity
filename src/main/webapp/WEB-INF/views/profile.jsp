@@ -1,18 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page isELIgnored = "false" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: user
   Date: 03.11.2021
-  Time: 18:26
+  Time: 22:01
   To change this template use File | Settings | File Templates.
 --%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Profile</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link href="../static/css/style.css" type="text/css" rel="stylesheet" >
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -70,15 +71,23 @@
     <c:if test="${!messages}">
         <p>${messages}</p>
     </c:if>
-    <form method="post">
-        <div style="margin-left: 150px"><label> ${username} </label></div>
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <div><label> New password: <input type="password" name="password" placeholder="Password"/> </label></div>
-        <div><label> New e-mail: <input type="email" name="email" value="${email}"/> </label></div>
-        <div><button type="submit">Save</button> </div>
-    </form>
+
+        <form:form modelAttribute="user" method="post">
+            <form:label path="username">Username: </form:label>
+            <form:input path="username"/>
+            <form:errors path="username" class="err"/>
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
+            <br>
+            <form:label path="password">Password: </form:label>
+            <form:input path="password"/>
+            <form:errors path="password" class="err"/>
+            <br>
+            <form:label path="email">E-mail: </form:label>
+            <form:input path="email"/>
+            <form:errors path="email" class="err"/>
+            <div><button type="submit">Save</button></div>
+        </form:form>
     </h5>
-    </form>
 </section>
 </body>
 </html>

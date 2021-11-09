@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -80,7 +81,7 @@ public class MainController {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult); //Получили список ошибок валидации, которую можно отобразить
 
             model.mergeAttributes(errorsMap);
-            model.addAttribute("message", message);
+            model.addAttribute("messagee", message);
         } else {
             if (file != null && !file.getOriginalFilename().isEmpty()) { // если файл не равен 0, то мы его добавим в класс (Messages)
                 File uploadDir = new File(uploadPath);
@@ -94,6 +95,8 @@ public class MainController {
 
                 file.transferTo(new File(uploadPath + "/" + resultFilename));   //загружаем наш файл
                 message.setFilename(resultFilename);
+
+                model.addAttribute("message", null);  //чтобы после обновления страницы не добовлялась таже форма
             }
             messagesRepository.save(message);
         }

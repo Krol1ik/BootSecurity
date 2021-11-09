@@ -5,7 +5,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Set;
 
@@ -14,10 +15,18 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotEmpty(message = "Username cannot be empty")
+    @Size(min = 2, max = 20, message = "Username should be valid")
     private String username;
+    @Size(min = 4, message = "Password must be more than 4 characters")
+    @NotEmpty(message = "Password cannot be empty")
     private String password;
+//    @Transient
+//    @NotEmpty(message = "Password confirmation cannot be empty")
+//    private String password2;
     private boolean active;
-
+    @Email (message = "Email should be valid")
+    @NotEmpty(message = "Email cannot be empty")
     private String email;
     private String activationCode;
 
@@ -108,6 +117,13 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
+//    public String getPassword2() {
+//        return password2;
+//    }
+//
+//    public void setPassword2(String password2) {
+//        this.password2 = password2;
+//    }
 }
 
 

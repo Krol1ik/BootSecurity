@@ -12,7 +12,7 @@
 <html>
 <head>
     <title>Messages</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
@@ -90,7 +90,7 @@
             <td>${mess.nameAuthor}</td>
         </tr>
             <c:if test="${!mess.filename}" >
-            <img src="/img/${mess.filename}" class="card-img-top" style="height: 200px">
+            <img src="/img/${mess.filename}" class="card-img-top" >
             </c:if>
     </div>
     </c:forEach>

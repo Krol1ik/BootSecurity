@@ -8,12 +8,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Registration</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="../static/css/style.css" type="text/css" rel="stylesheet" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -70,12 +71,22 @@ Add new user
 <c:if test="${!messages}">
     <p>${messages}</p>
 </c:if>
-<form action="/registration" method="post">
-    <div><label> User Name : <input type="text" name="username"/> </label></div>
+
+<form:form action="/registration" modelAttribute="user" method="post">
+    <form:label path="username">Username: </form:label>
+    <form:input path="username"/>
+    <form:errors path="username" class="err"/>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><label> E-mail: <input type="email" name="email"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
+    <br>
+    <form:label path="password">Password: </form:label>
+    <form:input path="password"/>
+    <form:errors path="password" class="err"/>
+    <br>
+    <form:label path="email">E-mail: </form:label>
+    <form:input path="email"/>
+    <form:errors path="email" class="err"/>
+    <div><button type="submit">Save</button></div>
+</form:form>
+
 </body>
 </html>
