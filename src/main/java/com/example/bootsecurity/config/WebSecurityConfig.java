@@ -1,5 +1,7 @@
 package com.example.bootsecurity.config;
 
+import com.example.bootsecurity.model.User;
+import com.example.bootsecurity.repository.UserRepository;
 import com.example.bootsecurity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)  //Подключает аннотацию для контроля роли в "UserController"
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private UserService userService;
 
@@ -51,5 +56,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService)
 //                .passwordEncoder(NoOpPasswordEncoder.getInstance());      //настроили проверку паролей при логине
         .passwordEncoder(passwordEncoder);
+
+
+        User admin = userRepository.findByUsername("admin");
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));     //весь код для кодирвоки существующих паролей
+        User user = userRepository.findByUsername("user");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(admin);
+        userRepository.save(user);
     }
 }

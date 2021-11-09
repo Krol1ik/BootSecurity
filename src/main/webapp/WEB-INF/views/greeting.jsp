@@ -65,12 +65,5 @@
     </div>
 </nav>
 </header>
-<div class="container mt-5">
-    <sec:authorize access="!isAuthenticated()">
-    <form method="post">
-        <button type="submit">Update password</button>
-    </form>
-    </sec:authorize>
-</div>
 </body>
 </html>

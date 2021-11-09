@@ -8,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -67,15 +68,32 @@
 </header>
 
 Form login
-<c:if test="${!messages}">
-    <p>${messages}</p>
-</c:if>
 <form action="/login" method="post">
+    <c:if test="${param.error != null}">
+        <div class="form-group">
+            <div class="alert alert-danger col-md-10 col-md-offset-1">
+                <strong>Error!</strong> Invalid username or password..
+            </div>
+        </div>
+    </c:if>
     <div><label> User Name : <input type="text" name="username"/> </label></div>
     <input type="hidden" name="_csrf" value="${_csrf.token}" />
     <div><label> Password: <input type="password" name="password"/> </label></div>
     <div><input type="submit" value="Sign In"/></div>
     <a href="/registration">Registration new user</a>
 </form>
+
+<%--<form:form action="/login" modelAttribute="user" method="post">--%>
+<%--    <form:label path="username">Username: </form:label>--%>
+<%--    <form:input path="username"/>--%>
+<%--    <form:errors path="username" class="err"/>--%>
+<%--    <input type="hidden" name="_csrf" value="${_csrf.token}" />--%>
+<%--    <br>--%>
+<%--    <form:label path="password">Password: </form:label>--%>
+<%--    <form:input path="password"/>--%>
+<%--    <form:errors path="password" class="err"/>--%>
+<%--    <br>--%>
+<%--    <div><button type="submit">Save</button></div>--%>
+<%--</form:form>--%>
 </body>
 </html>

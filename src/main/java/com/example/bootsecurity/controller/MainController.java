@@ -41,17 +41,6 @@ public class MainController {
 
         return "greeting";
     }
-    @PostMapping()
-    public String updatePasswordCoding() {
-        User admin = userRepository.findByUsername("admin");
-        admin.setPassword(passwordEncoder.encode(admin.getPassword()));     //весь код для кодирвоки существующих паролей
-
-        User user = userRepository.findByUsername("user");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(admin);
-        userRepository.save(user);
-        return "redirect:/login";
-    }
 
     @GetMapping("/main")
     public String sayHello(@RequestParam(required = false, defaultValue = "") String filter, Model model){
@@ -96,8 +85,9 @@ public class MainController {
                 file.transferTo(new File(uploadPath + "/" + resultFilename));   //загружаем наш файл
                 message.setFilename(resultFilename);
 
-                model.addAttribute("message", null);  //чтобы после обновления страницы не добовлялась таже форма
-            }
+               }
+            model.addAttribute("message", null);  //чтобы после обновления страницы не добовлялась таже форма
+
             messagesRepository.save(message);
         }
 

@@ -20,16 +20,16 @@ public class RegistrationController {
     private UserService userService;
 
     @GetMapping("/registration")
-    public String registration(@ModelAttribute ("user") User user){
+    public String registration(@ModelAttribute("user") User user) {
         return "registration";
     }
 
-    @PostMapping ("/registration")
-    public String addUser (@ModelAttribute ("user") @Valid User user, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+    @PostMapping("/registration")
+    public String addUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
             return "/registration";
         }
-        if(!userService.addUser(user)){
+        if (!userService.addUser(user)) {
             model.addAttribute("messages", "User exist!");
             return "registration";
         } else {
@@ -38,13 +38,13 @@ public class RegistrationController {
     }
 
     @GetMapping("/activate/{code}")
-    public String activate (Model model, @PathVariable String code){
+    public String activate(Model model, @PathVariable String code) {
         boolean isActivated = userService.activateUser(code);
 
-        if(isActivated){
+        if (isActivated) {
             model.addAttribute("messages", "Activation is successful");
         } else {
-            model.addAttribute("messages","Activation code is not found");
+            model.addAttribute("messages", "Activation code is not found");
         }
         return "login";
     }
