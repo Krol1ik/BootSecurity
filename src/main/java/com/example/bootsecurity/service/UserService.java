@@ -25,13 +25,7 @@ public class UserService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
+        return userRepository.findByUsername(username);
     }
 
     public boolean addUser (User user){
@@ -97,32 +91,21 @@ public class UserService implements UserDetailsService{
     }
 
     public void updateProfile(User user, String password, String email) {
-        String userEmail = user.getEmail();
         String userPassword = user.getPassword();
 
-        boolean isEmailChanged = (email != null && !email.equals(userEmail)
-                                    || email !=null && !userEmail.equals(email));
         boolean isPasswordChanged = (password != null && !password.equals(userPassword)
                 || password !=null && !userPassword.equals(email));
 
-        if(isEmailChanged){
-            user.setEmail(email);
-
-            if (!StringUtils.isEmpty(email)){   //если пользователь установил емаил
-                user.setActivationCode(UUID.randomUUID().toString());   //то мы присваеваем новый код активации
-            }
-        }
         if (!StringUtils.isEmpty(password)){
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(password));
 
             if (!StringUtils.isEmpty(password)){   //если пользователь установил пароль
                 user.setActivationCode(UUID.randomUUID().toString());   //то мы присваеваем новый код активации
             }
         }
-
         user.setActive(false);
         userRepository.save(user);
-        if(isEmailChanged || isPasswordChanged || isPasswordChanged && isEmailChanged){
+        if(isPasswordChanged){
             sendMessag(user);
         }
     }

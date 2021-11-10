@@ -117,7 +117,21 @@ public class User implements UserDetails {
         this.activationCode = activationCode;
     }
 
-//    public String getPassword2() {
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", email='" + email + '\'' +
+                ", activationCode='" + activationCode + '\'' +
+                ", roles=" + roles +
+                '}';
+    }
+
+    //    public String getPassword2() {
 //        return password2;
 //    }
 //

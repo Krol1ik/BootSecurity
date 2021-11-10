@@ -72,21 +72,12 @@
         <p>${messages}</p>
     </c:if>
 
-        <form:form modelAttribute="user" method="post">
-            <form:label path="username">Username: </form:label>
-            <form:input path="username"/>
-            <form:errors path="username" class="err"/>
+        <form method="post">
+            <div><label> Password: <input type="password" name="password" placeholder="Password"/> </label></div>
+            <div><label> Email: <input type="email" name="email" placeholder="some@some" value="${email}"/> </label></div>
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
-            <br>
-            <form:label path="password">Password: </form:label>
-            <form:input path="password"/>
-            <form:errors path="password" class="err"/>
-            <br>
-            <form:label path="email">E-mail: </form:label>
-            <form:input path="email"/>
-            <form:errors path="email" class="err"/>
             <div><button type="submit">Save</button></div>
-        </form:form>
+        </form>
     </h5>
 </section>
 </body>

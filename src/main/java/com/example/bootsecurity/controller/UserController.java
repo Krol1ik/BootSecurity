@@ -49,25 +49,18 @@ public class UserController {
     @GetMapping("/profile")
     //@AuthenticationPrincipal User user - благодоря этой аннотации мы получаем пользователя из контекста, а не из БД
     public String getProfile (Model model, @AuthenticationPrincipal User user){
-        model.addAttribute("user", new User());
         model.addAttribute("username", user.getUsername());
         model.addAttribute("email", user.getEmail());
         return "profile";
     }
 
     @PostMapping("profile")
-    public String updateProfile (
-            @Valid @ModelAttribute ("user") @AuthenticationPrincipal User user,
-            BindingResult bindingResult,
-            @RequestParam String password,
-            @RequestParam String email
-    ){
-        if(bindingResult.hasErrors()){
-            return "/profile";
-        } else {
-            userService.updateProfile(user, password, email);
+    public String updateProfile(@AuthenticationPrincipal User user,
+                                @RequestParam String password,
+                                @RequestParam String email){
+        userService.updateProfile(user, password, email);
 
-            return "redirect:profile";
-        }
+        return "redirect:/user/profile";
     }
-}
+    }
+
